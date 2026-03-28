@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  ng-pro-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ng-pro-backend
+    ports:
+      - "4001:4001"
+    volumes:
+      - ng_pro_db_data:/app/data
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SERVER_PORT=4001
+      - JWT_SECRET=ngproenterprisebillingsecretkey2024distlockcdr
+
+  ng-pro-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ng-pro-frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - ng-pro-backend
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: ng-pro-mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  whatsapp-bot:
+    build:
+      context: ./whatsapp-bot
+      dockerfile: Dockerfile
+    container_name: ng-pro-whatsapp
+    ports:
+      - "4002:4002"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - whatsapp_session:/app/.venom
+
+  freeradius:
+    image: freeradius/freeradius-server:latest
+    container_name: ng-pro-radius
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
+    volumes:
+      - ./radius/configs:/etc/raddb
+      - radius_data:/var/lib/radiusd
+    environment:
+      - RADSECRET=testing123
+    networks:
+      - ngpro_network
+
+  nas-simulator:
+    build:
+      context: ./nas-simulator
+      dockerfile: Dockerfile
+    container_name: ng-pro-nas
+    ports:
+      - "4003:4003"
+    environment:
+      - RADIUS_SERVER=freeradius
+      - NODE_ENV=production
+    depends_on:
+      - freeradius
+    networks:
+      - ngpro_network
+
+networks:
+  ngpro_network:
+    driver: bridge
+
+volumes:
+  ng_pro_db_data:
+  whatsapp_session:
+  radius_data:

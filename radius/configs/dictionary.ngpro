@@ -1,0 +1,16 @@
+# RADIUS Dictionary for NG-PRO
+# Custom attributes for ISP billing
+
+VENDOR          NG-PRO           45000
+
+BEGIN VENDOR    NG-PRO
+    ATTRIBUTE       NG-PRO-Plan-Id          1       integer
+    ATTRIBUTE       NG-PRO-Plan-Name        2       string
+    ATTRIBUTE       NG-Pro-Data-Limit      3       integer
+    ATTRIBUTE       NG-PRO-Data-Used       4       integer
+    ATTRIBUTE       NG-PRO-Session-Time    5       integer
+    ATTRIBUTE       NG-PRO-Session-Input   6       integer
+    ATTRIBUTE       NG-PRO-Session-Output  7       integer
+    ATTRIBUTE       NG-PRO-Expiry-Date     8       string
+    ATTRIBUTE       NG-PRO-Service-Status  9       string
+END VENDOR NG-PRO

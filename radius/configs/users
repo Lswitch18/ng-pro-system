@@ -1,0 +1,17 @@
+# users - RADIUS User Configuration
+# Format: username Cleartext-Password := "password"
+# For production, use SQL module to check against database
+
+# Default users for testing
+# Format: Username Password (in production, use SQL)
+
+# Testing user - CHANGE IN PRODUCTION
+"testuser" Cleartext-Password := "testpass"
+    Framed-IP-Address = 10.0.0.100,
+    Framed-Netmask = 255.255.255.0,
+    NAS-IP-Address = 0.0.0.0
+
+# DEFAULT configuration - REJECT unknown users by default
+# In production, this should be changed to use SQL
+DEFAULT Auth-Type := Reject
+    Reply-Message = "User not found in billing system"

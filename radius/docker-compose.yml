@@ -1,0 +1,25 @@
+# FreeRADIUS docker-compose configuration
+# Access the container: docker exec -it ng-pro-radius radtest username password localhost 1812 testing123
+
+version: '3.8'
+
+services:
+  freeradius:
+    image: freeradius/freeradius-server:latest
+    container_name: ng-pro-radius
+    ports:
+      - "1812:1812/udp"  # Authentication
+      - "1813:1813/udp"  # Accounting
+      - "18120:18120/udp" # Radsec
+    volumes:
+      - ./configs:/etc/raddb
+      - ./mods-available:/etc/raddb/mods-available
+      - ./mods-enabled:/etc/raddb/mods-enabled
+    environment:
+      - RADSECRET=testing123
+    networks:
+      - ngpro_radius
+
+networks:
+  ngpro_radius:
+    driver: bridge

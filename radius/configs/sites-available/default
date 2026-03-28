@@ -1,0 +1,75 @@
+# default site configuration
+server default {
+    listen {
+        type = auth
+        ipaddr = 0.0.0.0
+        port = 1812
+    }
+
+    listen {
+        type = acct
+        ipaddr = 0.0.0.0
+        port = 1813
+    }
+
+    authorize {
+        preprocess
+        chap
+        mschap
+        suffix
+        eap {
+            ok = return
+        }
+        files
+        sql
+        expiration
+        logintime
+        pap
+    }
+
+    authenticate {
+        Auth-Type PAP {
+            pap
+        }
+        Auth-Type CHAP {
+            chap
+        }
+        Auth-Type MS-CHAP {
+            mschap
+        }
+        eap
+    }
+
+    preacct {
+        preprocess
+        acct_unique
+        suffix
+        files
+    }
+
+    accounting {
+        detail
+        unix
+        radutmp
+        sql
+        exec
+        attr_filter.accounting_response
+    }
+
+    session {
+        radutmp
+        sql
+    }
+
+    post-auth {
+        exec
+        Auth-Type REJECT {
+            attr_filter.access_reject
+        }
+        sql
+        exec
+        Post-Auth-Type REJECT {
+            attr_filter.access_reject
+        }
+    }
+}
