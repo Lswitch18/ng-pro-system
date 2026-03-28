@@ -44,20 +44,55 @@ Na página de configuração do job:
 
 ---
 
-### Passo 4: Build Triggers
+### Passo 4: Build Triggers (Gatilhos de Build)
 
-1. Marque **"Poll SCM"**
-2. No campo **Schedule:**
-   ```
-   H/5 * * * *
-   ```
-   > Isso verifica mudanças no GitHub a cada 5 minutos
+Marque as opções desejadas:
 
-3. (Opcional) Marque **"GitHub hook trigger for GITScm polling"** para trigger automático
+#### ✅ GitHub hook trigger for GITScm polling
+- **Recomendado para CI/CD automático**
+- Disparado automaticamente quando há push no GitHub
+
+#### ✅ Consultar periodicamente o SCM (Poll SCM)
+- Verifica mudanças no repositório periodicamente
+- No campo **Schedule:**
+  ```
+  H/5 * * * *
+  ```
+  > Verifica a cada 5 minutos
+
+#### ✅ Construir periodicamente
+- Executa o build em horários agendados
+- Exemplo para executar diariamente às 9h:
+  ```
+  H 9 * * 1-5
+  ```
+
+#### ✅ Construir após a construção de outros projetos
+- Executa este job após outro job finalizar
+- Útil para pipelines dependentes
 
 ---
 
-### Passo 5: Build (Configurar Build)
+**Configuração recomendada:**
+Marque apenas **"GitHub hook trigger for GITScm polling"** para automático instantâneo.
+
+---
+
+### Passo 5: Environment (Ambiente)
+
+Opcional - Configurações de ambiente:
+
+#### ✅ Delete workspace before build starts
+- Limpa o diretório de trabalho antes de cada build
+- Recomendado para evitar problemas de cache
+
+#### ✅ Add timestamps to the Console Output
+- Adiciona timestamps aos logs do console
+- Útil para debugging
+
+---
+
+### Passo 6: Build (Configurar Build)
 
 1. Clique em **"Adicionar passo de build"** → **"Executar shell"**
 2. No campo de comando, cole:
@@ -92,17 +127,25 @@ echo "[4/4] Build concluído com sucesso!"
 
 ---
 
-### Passo 6: Configurar Post-Build (Opcional)
+### Passo 7: Ações de Pós-Build
 
-Para notificação por email:
+Clique em **"Adicionar ação de pós-build"** e escolha:
 
-1. Clique em **"Adicionar ação de pós-build"** → **"E-mail Notification"**
-2. **Recipients:** `admin@lswitch.com`
-3. Marque **"Send e-mail for every unstable build"**
+#### ✅ E-mail Notification
+- Envia email após o build
+- **Recipients:** `admin@lswitch.com`
+- Marque **"Send e-mail for every unstable build"**
+
+#### ✅ Archive the artifacts
+- Salva arquivos gerados pelo build
+- Útil para guardar JARs, WARs, etc.
+
+#### ✅ Build other projects
+- Dispara outro job após este finalizar
 
 ---
 
-### Passo 7: Salvar
+### Passo 8: Salvar
 
 1. Clique no botão **"Salvar"** (no final da página)
 
