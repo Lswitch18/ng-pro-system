@@ -311,7 +311,7 @@ docker exec billing-system-isp-postgres pg_isready
 
 ## Licença
 
-MIT License - Copyright (c) 2024 Wellynton Santos Jeronimo
+MIT License - Copyright (c) 2024
 
 ---
 
